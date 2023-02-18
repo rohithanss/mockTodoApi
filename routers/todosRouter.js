@@ -5,8 +5,14 @@ const TodoModel = require("../models/TodoModel.js");
 const todosRouter = Router();
 
 todosRouter.get("/", async (req, res) => {
+  const limit = 5;
+  let page = req.query.page || 1;
+  let skip = (page - 1) * limit;
+
+  console.log("page:", page);
+
   try {
-    let todos = await TodoModel.find();
+    let todos = await TodoModel.find().limit(limit).skip(skip);
     return res
       .status(200)
       .send({ msg: "todos fetched successfully", status: "success", todos });
